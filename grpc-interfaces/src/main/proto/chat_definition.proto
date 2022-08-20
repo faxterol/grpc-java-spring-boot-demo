@@ -1,0 +1,39 @@
+
+
+//Le indicamos que la sintaxis del protobuff es versión 3
+syntax = "proto3";
+
+//Definimos el paquete al que pertenece el protobuff, con esto podemos evitar conflictos si tenemos servicios y datos con el mismo nombre
+package com.faxterol.grpcdemo.interfaces;
+
+//Estas son como variables que le indicamos al compilador protoc, las opciones dependen de cada lenguaje.
+option java_multiple_files = true; //Si es falso, se van a crear un solo archivo en el cual va a venir todo el código java generado
+option java_package = "com.faxterol.grpcdemo.interfaces"; //El paquete java donde se van a crear las interfaces
+option java_outer_classname = "ChatServiceProto"; //Es el nombre de la clase que se va a generar para este archivo proto y que necesita el compilador para generar las interfaces. Si no es definido, entonces se va a tomar el nombre del archivo en formato camel case. 
+
+//Definición de un servicio
+service ChatService {
+    //Definición de un método, comunicación unaria
+    rpc enviarMensaje (EnviarMensaje) returns (RecibirMensaje) {}
+    //Stream unidireccional cliente a servidor
+    rpc enviarMultiplesMensajes (stream EnviarMensaje) returns (RecibirMensaje) {}
+    //Stream unidireccional servidor a cliente
+    rpc recibirMultiplesRespuestas (EnviarMensaje) returns (stream RecibirMensaje) {}
+    //Stream bidireccional
+    rpc enviarRecibirMultiplesMensajes (stream EnviarMensaje) returns (stream RecibirMensaje) {}
+}
+
+//Objeto de tipo mensaje, en este caso es para una petición que va a reibir un metodo
+message EnviarMensaje {
+    uint32 to = 1; //el tipo de dato del campo (uint32), el nombre del campo (to) y el número de orden irrepetible del campo. Los campos más utilizados son los primeros. Una vez especificado el mensaje y en produccion, el orden de los campos no puede cambiar. (o si, pero meterás en problemas a los stubs.)
+    string message = 2;
+}
+
+//Objeto de tipo mensaje, es lo que va a responder un método.
+message RecibirMensaje {
+    uint32 from = 1;
+    string message = 2;
+}
+
+
+
