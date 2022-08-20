@@ -34,6 +34,12 @@
         <artifactId>grpc-protobuf</artifactId>
         <version>${grpc.version}</version>
     </dependency>
+    <!-- Si usas Java 11, este paquete no viene de forma nativa, incluyelo en tu pom file -->
+    <dependency>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+          <version>1.3.2</version>
+    </dependency>
   </dependencies>
 
 
